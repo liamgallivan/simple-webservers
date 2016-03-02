@@ -9,7 +9,6 @@ def serve_file(client_conn, fileName):
     file = open(fileName, 'rb')
     read = file.read(1024)
     while read:
-        print('Sending...')
         client_conn.send(read)
         read = file.read(1024)
     print('Sent file')
@@ -21,13 +20,12 @@ def listen_forever(fileName=''):
 
     listen_socket = socket.socket()
     listen_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-    listen_socket.bind((socket.gethostname(), PORT))
+    listen_socket.bind(('', PORT))
     listen_socket.listen(5)
     print('listening at port: {0}...'.format(PORT))
 
     while True:
         client_conn, client_addr = listen_socket.accept()
-        print(client_addr)
         serve_file(client_conn, fileName)
         client_conn.close()
 
